@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour {
 	public static int Caridade = 0;
@@ -10,6 +11,11 @@ public class Player : MonoBehaviour {
 	[SerializeField] private PlayerCanvas _playerCanvas;
 	[SerializeField] private IInteractable _currentInteractable;
 	[SerializeField] private Transform _playerSprite;
+
+	[SerializeField] private AudioSource _footstepSource;
+	[SerializeField] private AudioClip[] _footstepsAudios;
+	[NonSerialized] private bool _leftFootstep;
+	
 	
 	[NonSerialized] private Transform _transform;
 	[NonSerialized] private Rigidbody2D _rb;
@@ -46,4 +52,16 @@ public class Player : MonoBehaviour {
 	public void CaridadeAdd(int ammount) {
 		Player.Caridade += ammount;
 	}
+
+	
+	public void Footstep() {
+		
+		var footstep = this._footstepsAudios[(int)Mathf.Clamp01(Random.Range(-1,2))];
+		this._leftFootstep = !this._leftFootstep;
+
+		this._footstepSource.clip = footstep;
+		this._footstepSource.Stop();
+		this._footstepSource.Play();
+	}
+	
 }
